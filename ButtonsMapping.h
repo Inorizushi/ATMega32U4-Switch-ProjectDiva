@@ -3,22 +3,29 @@
 // DEFINE buttons >> pins
 #define PIN_UP 255 // Unused, change if needed.
 #define PIN_DOWN 255 // Unused, change if needed.
-#define PIN_LEFT 1
-#define PIN_RIGHT 0
+#define PIN_LEFT 8
+#define PIN_RIGHT 9
 #define PIN_A 4
 #define PIN_B 5
 #define PIN_X 7
 #define PIN_Y 6
-#define PIN_LB 9
-#define PIN_RB 8
-#define PIN_LT 16
-#define PIN_RT 10
-#define PIN_START 15
-#define PIN_SELECT 14
-#define PIN_HOME 18 // Unused, uncomment the command "buttonHOME.attach" in the Main file to use it.
+#define PIN_LB 23
+#define PIN_RB 23
+#define PIN_LT 23
+#define PIN_RT 23
+#define PIN_START 11
+#define PIN_SELECT 12
+#define PIN_HOME 20 // Unused, uncomment the command "buttonHOME.attach" in the Main file to use it.
 
-#define PIN_SWITCHMODE 19  // Button to switch the Mode of the controller. (go to SLIDER MENU)
-#define PIN_NAVMODE 18     // Button to enable NAVIGATION MODE that let you have different mapping
+#define PIN_SWITCHMODE 10  // Button to switch the Mode of the controller. (go to SLIDER MENU)
+#define PIN_NAVMODE 13     // Button to enable NAVIGATION MODE that let you have different mapping
+
+#define PIN_LED_BUTTON_A 18
+#define PIN_LED_BUTTON_B 19
+#define PIN_LED_BUTTON_Y 20
+#define PIN_LED_BUTTON_X 21
+
+#define PIN_LED_BOTTOM 16
 
 
 

@@ -7,7 +7,7 @@
 // LEDs
 #define NUM_LEDS_PER_STRIP 32
 #define LED_TYPE WS2812B
-#define LED_DATA_PIN 21
+#define LED_DATA_PIN 14
 #define COLOR_ORDER GRB
 #define LEDS_MAXVOLTS 5           // How many volts for the LEDs
 #define LEDS_MAXMILLIAMPS 230     // How many milliamps for the LEDs

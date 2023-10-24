@@ -136,6 +136,11 @@ int navigationPage = 1;
 
 short sensor32 = 0;
 
+bool bool_ledbutton_A = false;
+bool bool_ledbutton_B = false;
+bool bool_ledbutton_Y = false;
+bool bool_ledbutton_X = false;
+
 
 // LEDs
 CRGB leds[NUM_LEDS_PER_STRIP];
@@ -294,6 +299,13 @@ void setup() {
   ledsInitialization();         // Initialise Leds...
   SetupHardware();              // Setup Hardware...
   GlobalInterruptEnable();
+
+  pinMode(PIN_LED_BUTTON_A,OUTPUT);
+  pinMode(PIN_LED_BUTTON_B,OUTPUT);
+  pinMode(PIN_LED_BUTTON_X,OUTPUT);
+  pinMode(PIN_LED_BUTTON_Y,OUTPUT);
+
+  pinMode(PIN_LED_BOTTOM,OUTPUT);
 
   sensorsPausedCycles = sensorsPausedCyclesInit; // Lowering slider speed for performances when not touching
 }
@@ -1536,11 +1548,10 @@ if(sliderMode == SDVX){
     
 }
 
-
 void buttonProcessing(){
   if(sliderMode == SDVX){
-    if (buttonStatus[BUTTONLEFT]) {ReportData.Button |= L3_MASK_ON;}
-    if (buttonStatus[BUTTONRIGHT]) {ReportData.Button |= R3_MASK_ON;}
+    if (buttonStatus[BUTTONLEFT]) {ReportData.Button |= DPAD_LEFT_MASK_ON;}
+    if (buttonStatus[BUTTONRIGHT]) {ReportData.Button |= DPAD_RIGHT_MASK_ON;}
   }
     if (!navigationShortcut){
     if (buttonStatus[BUTTONA]) {ReportData.Button |= A_MASK_ON;}
@@ -1584,19 +1595,35 @@ void buttonProcessing(){
     leds[31] = leds[30] = leds[29] = CRGB::Cyan;
     leds[12] = leds[13] = leds[14] = leds[15] = leds[16] = leds[17] = leds[18] = leds[19] = leds[20] = CRGB::Cyan;
 
-    if (sensors[0] || sensors[1] || sensors[2]){ReportData.Button |= L3_MASK_ON; leds[0] = leds[1] = leds[2] = CRGB::White;}
-    if (sensors[31] || sensors[30] || sensors[29]){ReportData.Button |= R3_MASK_ON; leds[31] = leds[30] = leds[29] = CRGB::White;}
-    if (sensors[12] || sensors[13] || sensors[14] || sensors[15] || sensors[16] || sensors[17] || sensors[18] || sensors[19] || sensors[20])
-      {ReportData.Button |= SELECT_MASK_ON; leds[12] = leds[13] = leds[14] = leds[15] = leds[16] = leds[17] = leds[18] = leds[19] = leds[20] = CRGB::White;}
+    if (sensors[0] || sensors[1] || sensors[2]){ReportData.HAT = DPAD_LEFT_MASK_ON; leds[0] = leds[1] = leds[2] = CRGB::White;}
+    if (sensors[31] || sensors[30] || sensors[29]){ReportData.HAT = DPAD_RIGHT_MASK_ON; leds[31] = leds[30] = leds[29] = CRGB::White;}
+    if (sensors[12] || sensors[13] || sensors[14] || sensors[15]){ReportData.Button |= L3_MASK_ON; leds[12] = leds[13] = leds[14] = leds[15] = CRGB::White;}
+    if (sensors[16] || sensors[17] || sensors[18] || sensors[19]){ReportData.Button |= R3_MASK_ON; leds[16] = leds[17] = leds[18] = leds[19] = CRGB::White;}
 
-    
-    
-    
-    
   }
   
+ // LED buttons
+  LedButtonProcess(buttonStatus[BUTTONA], PIN_LED_BUTTON_A, bool_ledbutton_A);
+  LedButtonProcess(buttonStatus[BUTTONB], PIN_LED_BUTTON_B, bool_ledbutton_B);
+  LedButtonProcess(buttonStatus[BUTTONY], PIN_LED_BUTTON_Y, bool_ledbutton_Y);
+  LedButtonProcess(buttonStatus[BUTTONX], PIN_LED_BUTTON_X, bool_ledbutton_X);  
+
+  if (buttonStatus[BUTTONA] || buttonStatus[BUTTONB] || buttonStatus[BUTTONY] || buttonStatus[BUTTONX]) {
+    digitalWrite(PIN_LED_BOTTOM, HIGH);
+  } else {
+    digitalWrite(PIN_LED_BOTTOM, LOW);
+  }
   
-  
+}
+
+void LedButtonProcess(bool buttonStatus, int pin, bool ledStatus){
+  if (!ledStatus && !buttonStatus) { // If led is off and button not pressed, light up the led.
+    ledStatus = true;
+    digitalWrite(pin, HIGH);
+  } else {
+    ledStatus = false;
+    digitalWrite(pin, LOW);
+  }
 }
 
 void resetButtons(){
